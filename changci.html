@@ -214,13 +214,13 @@
             async copy() {
                 try {
                     await useClipboard().toClipboard(this.lrc);
-                    ElMessage({
+                    ElementPlus.ElMessage({
                         message: '复制成功',
                         type: 'success',
                     })
                 } catch (e) {
                     console.error(e);
-                    ElMessage({
+                    ElementPlus.ElMessage({
                         message: '复制失败' + e.message,
                         type: 'error',
                     })
