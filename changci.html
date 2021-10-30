@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
     <title>制作唱词 - 心灵的孤僻</title>
     <!-- Import style -->
     <link rel="stylesheet" href="./css/changci.css" />
@@ -32,19 +35,22 @@
         <div id="formApp" style="display: none;">
             <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :md="8" :sm="12">
                         <el-form-item label="剧种" prop="jz">
-                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create default-first-option :style="{width: '100%'}">
-                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
+                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create
+                                default-first-option :style="{width: '100%'}">
+                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label"
+                                    :value="item.value" :disabled="item.disabled"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :md="8" :sm="12">
                         <el-form-item label="剧目" prop="jm">
-                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable :style="{width: '100%'}"></el-input>
+                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable
+                                :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :md="8" :sm="12">
                         <el-form-item label="时差" prop="offset">
                             <el-input-number v-model="formData.offset" placeholder="请输入时差" :step='1'>
                             </el-input-number>
@@ -58,7 +64,7 @@
                             </el-tooltip>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col :md="24" :sm="12">
                         <el-form-item label="选段" prop="ti">
                             <el-input v-model="formData.ti" placeholder="请输入选段" clearable :style="{width: '100%'}">
                             </el-input>
@@ -66,14 +72,17 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="12">
                         <el-form-item label="唱词列表" prop="content" :style="{width: '100%'}">
-                            <el-input v-model="formData.content" @paste="handlePaste" type="textarea" placeholder="请输入或复制唱词" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                            <el-input v-model="formData.content" @paste="handlePaste" type="textarea"
+                                placeholder="请输入或复制唱词" :autosize=" { minRows: 10, maxRows: 25 }"
+                                :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="12">
                         <el-form-item label="LRC列表" :style="{width: '100%'}">
-                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC"
+                                :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -179,7 +188,7 @@
             },
         },
         watch: {},
-        created() {},
+        created() { },
         mounted() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('formApp').style.display = 'block';
