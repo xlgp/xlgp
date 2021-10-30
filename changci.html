@@ -33,21 +33,18 @@
             </div>
         </div>
         <div id="formApp" style="display: none;">
-            <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+            <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="80px">
                 <el-row>
                     <el-col :md="8" :sm="12">
                         <el-form-item label="剧种" prop="jz">
-                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create
-                                default-first-option :style="{width: '100%'}">
-                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label"
-                                    :value="item.value" :disabled="item.disabled"></el-option>
+                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create default-first-option :style="{width: '100%'}">
+                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :md="8" :sm="12">
                         <el-form-item label="剧目" prop="jm">
-                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable
-                                :style="{width: '100%'}"></el-input>
+                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :md="8" :sm="12">
@@ -74,15 +71,12 @@
                 <el-row>
                     <el-col :xs="24" :sm="12">
                         <el-form-item label="唱词列表" prop="content" :style="{width: '100%'}">
-                            <el-input v-model="formData.content" @paste="handlePaste" type="textarea"
-                                placeholder="请输入或复制唱词" :autosize=" { minRows: 10, maxRows: 25 }"
-                                :style="{width: '100%'}"></el-input>
+                            <el-input v-model="formData.content" @paste="handlePaste" type="textarea" placeholder="请输入或复制唱词" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12">
                         <el-form-item label="LRC列表" :style="{width: '100%'}">
-                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC"
-                                :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -93,19 +87,20 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item size="large">
+                        <el-form-item size="large" label-width="0px">
                             <el-button type="primary" @click="submitForm">复制LRC</el-button>
                         </el-form-item>
                     </el-col>
                     </el-form-item>
                 </el-row>
             </el-form>
-            <div style="margin-left: 100px;">
-                <h3>解释时差</h3>
-                <p>由于直播时有网络延时，一般需要提前发送字幕，时差主要用于提前或延后显示唱词，单位：s</p>
-                <p>&gt;0 ：表示延后</p>
-                <p>&lt;0 ：表示提前</p>
-            </div>
+            <el-collapse>
+                <el-collapse-item title="解释时差">
+                    <p>由于直播时有网络延时，一般需要提前发送字幕，时差主要用于提前或延后显示唱词，单位：s</p>
+                    <p>&gt;0 ：表示延后</p>
+                    <p>&lt;0 ：表示提前</p>
+                </el-collapse-item>
+            </el-collapse>
         </div>
     </main>
     <footer></footer>
@@ -130,7 +125,6 @@
                     content: "",
                     result: '',
                 },
-                show: true,
                 rules: {
                     jz: [{
                         required: true,
@@ -188,7 +182,7 @@
             },
         },
         watch: {},
-        created() { },
+        created() {},
         mounted() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('formApp').style.display = 'block';
