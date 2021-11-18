@@ -14,6 +14,19 @@
         .el-textarea.is-disabled .el-textarea__inner {
             background-color: rgb(18, 18, 18);
         }
+
+        #startBtn {
+            outline: none;
+            border: none;
+            border-radius: 50%;
+            width: 205px;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            height: 205px;
+            background-color: #409eff;
+            box-shadow: 0px 1px 6px 0px #409eff;
+        }
     </style>
 </head>
 
@@ -94,7 +107,6 @@
                                 </template>
                             </el-popconfirm>
                             <el-button round @click="start">{{startBtnText}}</el-button>
-                            <el-button type="primary" round @click="addShowTime">添加时间</el-button>
                             <label class="el-form-item__label" style="margin: 0 20px;">{{showTime}}</label>
                         </el-form-item>
                     </el-col>
@@ -106,8 +118,11 @@
                     </el-form-item>
                 </el-row>
             </el-form>
-            <el-collapse>
-                <el-collapse-item title="解释时差">
+            <div style="text-align: center;">
+                <button @click="addShowTime" id="startBtn">添加时间</button>
+            </div>
+            <el-collapse v-model="activeCollapseName">
+                <el-collapse-item name="offset" title="解释时差">
                     <p>由于直播时有网络延时，一般需要提前发送字幕，时差主要用于提前或延后显示唱词，单位：s</p>
                     <p>&gt;0 ：表示延后</p>
                     <p>&lt;0 ：表示提前</p>
@@ -139,6 +154,7 @@
                 },
                 jiShiIntervalID: 0,//记时id
                 currentTime: 0, //当前的时间，long型
+                activeCollapseName: 'offset',
                 rules: {
                     jz: [{
                         required: true,
