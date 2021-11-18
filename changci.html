@@ -37,14 +37,17 @@
                 <el-row>
                     <el-col :md="8" :sm="12">
                         <el-form-item label="剧种" prop="jz">
-                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create default-first-option :style="{width: '100%'}">
-                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
+                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create
+                                default-first-option :style="{width: '100%'}">
+                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label"
+                                    :value="item.value" :disabled="item.disabled"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :md="8" :sm="12">
                         <el-form-item label="剧目" prop="jm">
-                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable :style="{width: '100%'}"></el-input>
+                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable
+                                :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :md="8" :sm="12">
@@ -71,19 +74,28 @@
                 <el-row>
                     <el-col :xs="24" :sm="12">
                         <el-form-item label="唱词列表" prop="content" :style="{width: '100%'}">
-                            <el-input v-model="formData.content" @paste="handlePaste" type="textarea" placeholder="请输入或复制唱词" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                            <el-input v-model="formData.content" type="textarea" ref="content" placeholder="请输入或复制唱词"
+                                :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12">
                         <el-form-item label="LRC列表" :style="{width: '100%'}">
-                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC"
+                                :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
                         <el-form-item size="large">
-                            <el-button @click="resetForm">重置</el-button>
+                            <el-popconfirm title="确定重置吗？不可恢复哦！" @confirm="resetForm">
+                                <template #reference>
+                                    <el-button>重置</el-button>
+                                </template>
+                            </el-popconfirm>
+                            <el-button round @click="start">{{startBtnText}}</el-button>
+                            <el-button type="primary" round @click="addShowTime">添加时间</el-button>
+                            <label class="el-form-item__label" style="margin: 0 20px;">{{showTime}}</label>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -125,6 +137,8 @@
                     content: "",
                     result: '',
                 },
+                jiShiIntervalID: 0,//记时id
+                currentTime: 0, //当前的时间，long型
                 rules: {
                     jz: [{
                         required: true,
@@ -180,21 +194,49 @@
                     this.formData.content
                 ].join('\n');
             },
+            showTime() {
+                return this.getTime(this.currentTime);
+            },
+            startBtnText() {
+                return this.jiShiIntervalID == 0 && '开始计时' || '暂停计时';
+            },
         },
         watch: {},
-        created() {},
+        created() { },
         mounted() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('formApp').style.display = 'block';
         },
         methods: {
-
-            getTime(time, i) {
-                time *= i;
+            start() {
+                this.currentTime = 0;
+                window.clearInterval(this.jiShiIntervalID);
+                if (this.jiShiIntervalID == 0) {
+                    this.run();
+                } else {
+                    this.jiShiIntervalID = 0;
+                }
+            },
+            run() {
+                let delay = 11;
+                this.jiShiIntervalID = window.setInterval(() => {
+                    this.currentTime += delay;
+                }, delay);
+            },
+            addShowTime() {
+                let textarea = this.$refs.content.$el.firstElementChild;
+                let i = this.formData.content.substring(0, textarea.selectionEnd).lastIndexOf('\n') + 1;
+                textarea.setRangeText("[" + this.showTime + "]", i, i);
+                this.formData.content = textarea.value;
+                let j = this.formData.content.substring(i + 1).indexOf('\n') + i;
+                textarea.focus();
+                textarea.setSelectionRange(j + 2, j + 2);
+            },
+            getTime(time) {
                 let minute = parseInt(time / 60000);
                 let second = parseInt((time % 60000) / 1000);
                 let millis = time % 1000;
-                return "[" + (minute < 10 && "0" + minute || minute) + ":" + (second < 10 && "0" + second || second) + "." + (millis < 10 && "0" + millis || millis) + "]";
+                return (minute < 10 && "0" + minute || minute) + ":" + (second < 10 && "0" + second || second) + "." + (millis < 10 && "0" + millis || millis);
             },
             handlePaste(event) {
                 let paste = (event.clipboardData || window.clipboardData).getData('text');
@@ -203,7 +245,7 @@
                     let time = 7 * 1000;
                     for (let i = 0; i < list.length; i++) {
                         const element = list[i];
-                        list[i] = this.getTime(time, i + 1) + list[i];
+                        list[i] = this.getTime(time * (i + 1)) + list[i];
                     }
                     this.formData.content = list.join('\n');
                 }
