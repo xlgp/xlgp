@@ -88,7 +88,8 @@
                     <el-col :xs="24" :sm="12">
                         <el-form-item label="唱词列表" prop="content" :style="{width: '100%'}">
                             <el-input v-model="formData.content" type="textarea" ref="content" placeholder="请输入或复制唱词"
-                                :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                                @paste="handlePaste" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12">
@@ -255,17 +256,19 @@
                 return (minute < 10 && "0" + minute || minute) + ":" + (second < 10 && "0" + second || second) + "." + (millis < 10 && "0" + millis || millis);
             },
             handlePaste(event) {
-                let paste = (event.clipboardData || window.clipboardData).getData('text');
-                if (paste && paste.trim()) {
-                    let list = paste.split('\n').filter(value => value.trim());
-                    let time = 7 * 1000;
-                    for (let i = 0; i < list.length; i++) {
-                        const element = list[i];
-                        list[i] = this.getTime(time * (i + 1)) + list[i];
+                if (this.formData.content.trim() == '') {
+                    let paste = (event.clipboardData || window.clipboardData).getData('text');
+                    if (paste && paste.trim()) {
+                        let list = paste.split('\n').filter(value => value.trim());
+                        let time = 7 * 1000;
+                        for (let i = 0; i < list.length; i++) {
+                            const element = list[i];
+                            list[i] = '[' + this.getTime(time * (i + 1)) + ']' + list[i];
+                        }
+                        this.formData.content = list.join('\n');
                     }
-                    this.formData.content = list.join('\n');
+                    event.preventDefault();
                 }
-                event.preventDefault();
             },
             async copy() {
                 try {
