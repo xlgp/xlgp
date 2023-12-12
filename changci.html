@@ -9,7 +9,7 @@
     <title>制作唱词 - 心灵的孤僻</title>
     <!-- Import style -->
     <link rel="stylesheet" href="./css/changci.css" />
-    <link rel="stylesheet" href="https://unpkg.com/element-plus@1.1.0-beta.24/dist/index.css" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.12/index.min.css" rel="stylesheet">
     <style>
         .el-textarea.is-disabled .el-textarea__inner {
             background-color: rgb(18, 18, 18);
@@ -96,9 +96,21 @@
                             </el-tooltip>
                         </el-form-item>
                     </el-col>
-                    <el-col :md="24" :sm="12">
+                    <el-col :md="12" :sm="12">
                         <el-form-item label="选段" prop="ti">
                             <el-input v-model="formData.ti" placeholder="请输入选段" clearable :style="{width: '100%'}">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="6" :sm="12">
+                        <el-form-item label="版本" prop="ver">
+                            <el-input v-model="formData.ver" placeholder="请输入版本" clearable :style="{width: '100%'}">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="6" :sm="12">
+                        <el-form-item label="关键词" prop="keys">
+                            <el-input v-model="formData.keys" placeholder="请输入关键词" clearable :style="{width: '100%'}">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -150,13 +162,17 @@
             </el-collapse>
         </div>
     </main>
-    <footer></footer>
+    <footer>
+        <p style="text-align: center;font-size: small;">
+            感谢<a href="https://www.bootcdn.cn/">BootCDN</a>提供CDN支持。
+        </p>
+    </footer>
 </body>
 <!-- Import Vue 3 -->
-<script src="https://unpkg.com/vue@3.2.20/dist/vue.global.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
 <!-- Import component library -->
-<script src="https://unpkg.com/element-plus@1.1.0-beta.24/dist/index.full.js"></script>
-<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.12/index.full.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
 <script src="./js//useClipboard.js"></script>
 <script>
     let formApp = {
@@ -171,6 +187,9 @@
                     ti: '',
                     content: "",
                     result: '',
+                    keys: "",
+                    ver: "",
+                    by: "",
                 },
                 jiShiIntervalID: 0,//记时id
                 currentTime: 0, //当前的时间，long型
@@ -215,6 +234,9 @@
                     "label": "歌曲",
                     "value": "歌曲"
                 }, {
+                    "label": "黄梅歌",
+                    "value": "黄梅歌"
+                }, {
                     "label": "其他",
                     "value": "其他"
                 }],
@@ -223,10 +245,15 @@
         computed: {
             lrc() {
                 return [
-                    "[ti:" + this.formData.ti + "]",
-                    "[jz:" + this.formData.jz + "]",
-                    "[jm:" + this.formData.jm + "]",
-                    "[offset:" + this.formData.offset + "]",
+                    "[ti:" + (this.formData.ti || "") + "]",
+                    "[oti:" + (this.formData.ti || "") + "]",
+                    "[jz:" + (this.formData.jz || "") + "]",
+                    "[jm:" + (this.formData.jm || "") + "]",
+                    "[ojm:" + (this.formData.jm || "") + "]",
+                    "[ver:" + (this.formData.ver || "") + "]",
+                    "[offset:" + (this.formData.offset || 0) + "]",
+                    "[by:" + (this.formData.by || "") + "]",
+                    "[keys:" + (this.formData.keys || "") + "]",
                     this.formData.content
                 ].join('\n');
             },
